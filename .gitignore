@@ -23,7 +23,7 @@ WalkWise.Api/bin/
 WalkWise.Api/obj/
 WalkWise.Api/appsettings.Development.json
 
-# SQLite speech cache database
+# SQLite databases
 WalkWise.Api/*.db
 WalkWise.Api/*.db-shm
 WalkWise.Api/*.db-wal

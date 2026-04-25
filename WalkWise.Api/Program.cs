@@ -30,18 +30,28 @@ builder.Services.AddCors(options =>
 builder.Services.AddDbContext<AppDbContext>(opt =>
     opt.UseSqlite(builder.Configuration.GetConnectionString("SpeechCache") ?? "Data Source=speech-cache.db"));
 
+builder.Services.AddDbContext<ContextDbContext>(opt =>
+    opt.UseSqlite(builder.Configuration.GetConnectionString("ContextStore") ?? "Data Source=context-store.db"));
+
+builder.Services.AddSingleton<QrScanService>();
+builder.Services.AddScoped<ContextService>();
+
 var app = builder.Build();
 
-// Ensure the SQLite schema exists on startup (no migrations needed)
+// Ensure both SQLite schemas exist on startup (no migrations needed)
 using (var scope = app.Services.CreateScope())
+{
     scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.EnsureCreated();
+    scope.ServiceProvider.GetRequiredService<ContextDbContext>().Database.EnsureCreated();
+}
 
 app.UseCors();
 
 var cfg = app.Configuration;
-var visionKey  = cfg["ApiKeys:GoogleVision"] ?? "";
-var geminiKey  = cfg["ApiKeys:Gemini"]       ?? "";
-var elevenKey  = cfg["ApiKeys:ElevenLabs"]   ?? "";
+var visionKey       = cfg["ApiKeys:GoogleVision"] ?? "";
+var geminiKey       = cfg["ApiKeys:Gemini"]       ?? "";
+var elevenKey       = cfg["ApiKeys:ElevenLabs"]   ?? "";
+var characterPrompt = cfg["CharacterPrompt"]       ?? "";
 
 // ── POST /api/vision ────────────────────────────────────────────────────────
 app.MapPost("/api/vision", async (VisionRequest req, IHttpClientFactory factory) =>
@@ -107,7 +117,7 @@ app.MapPost("/api/vision", async (VisionRequest req, IHttpClientFactory factory)
 });
 
 // ── POST /api/gemini/ask ─────────────────────────────────────────────────────
-app.MapPost("/api/gemini/ask", async (GeminiAskRequest req, IHttpClientFactory factory) =>
+app.MapPost("/api/gemini/ask", async (GeminiAskRequest req, IHttpClientFactory factory, ContextService ctx, QrScanService qrScanner) =>
 {
     if (string.IsNullOrEmpty(geminiKey))
         return Results.Problem("Gemini API key is not configured on the server.", statusCode: 500);
@@ -123,18 +133,21 @@ app.MapPost("/api/gemini/ask", async (GeminiAskRequest req, IHttpClientFactory f
         ? $"\n\nGoogle Vision results for this frame:\n{FormatVision(req.VisionResults)}"
         : "";
 
-    var jsonShape  = """{"question":"<verbatim transcription>","answer":"<spoken reply>"}""";
+    var qrBlock        = await ctx.GetPromptBlockAsync(req.ImageBase64, qrScanner);
+    var jsonShape      = """{"question":"<verbatim transcription>","answer":"<spoken reply>"}""";
+    var characterBlock = string.IsNullOrWhiteSpace(characterPrompt) ? "" : $"\n\n{characterPrompt}";
     var systemText = $"""
-        You are a fantasy "system" like in isekai anime.
+        You are a visual assistant helping a user understand what's around them.{characterBlock}
+
         The user just asked a question by voice. The audio is attached. You also have:
         - A snapshot of what the user is looking at right now.
-        - The list of objects YOLO has currently detected in that snapshot.{(visionBlurb.Length > 0 ? "\n- Additional Google Vision analysis of the same frame." : "")}
+        - The list of objects YOLO has currently detected in that snapshot.{(visionBlurb.Length > 0 ? "\n- Additional Google Vision analysis of the same frame." : "")}{qrBlock}
 
         Currently detected objects:
         {detectionList}{visionBlurb}
 
-        Transcribe the question, then answer it grounded in the image. Keep your answer to 1-3 short sentences, friendly and conversational, no markdown, no lists. Don't preface with "You asked..." - just answer naturally.
-        Describe it as if you were a D&D dungeon master describing an object or scene to a player who just examined it
+        TASK: Transcribe the spoken question, then answer it directly — always address what was actually asked, grounded in the image.
+        Keep your answer to 1-3 short sentences. No markdown, no lists. Don't preface with "You asked..." — just answer naturally.
         Respond as JSON only, with this exact shape:
         {jsonShape}
         """;
@@ -176,7 +189,7 @@ app.MapPost("/api/gemini/ask", async (GeminiAskRequest req, IHttpClientFactory f
 });
 
 // ── POST /api/gemini/describe ────────────────────────────────────────────────
-app.MapPost("/api/gemini/describe", async (GeminiDescribeRequest req, IHttpClientFactory factory) =>
+app.MapPost("/api/gemini/describe", async (GeminiDescribeRequest req, IHttpClientFactory factory, ContextService ctx, QrScanService qrScanner) =>
 {
     if (string.IsNullOrEmpty(geminiKey))
         return Results.Problem("Gemini API key is not configured on the server.", statusCode: 500);
@@ -188,11 +201,14 @@ app.MapPost("/api/gemini/describe", async (GeminiDescribeRequest req, IHttpClien
         ? $"\n\nGoogle Vision analysis:\n{FormatVision(req.VisionResults)}"
         : "";
 
+    var qrBlock        = await ctx.GetPromptBlockAsync(req.ImageBase64, qrScanner);
+    var characterBlock = string.IsNullOrWhiteSpace(characterPrompt) ? "" : $"\n\n{characterPrompt}";
     var prompt = $"""
-        You are a fantasy "system" like in isekai anime, The user tapped on an object detected as "{req.Label}".{visionBlurb}
+        You are a visual assistant helping a user understand what's around them.{characterBlock}
 
-        Look at the cropped image and write 2-4 short sentences describing what you see in plain language: what it is, any notable details (color, brand, text, condition), and one piece of useful or interesting context. No lists, no markdown, no headings. Speak directly to the user.
-        Describe it as if you were a D&D dungeon master describing an object to a player who just examined it, including the aggressiveness of it etc. And add more playful fantasy flavor.
+        The user tapped on an object detected as "{req.Label}".{visionBlurb}{qrBlock}
+
+        TASK: Look at the cropped image and write 2-4 short sentences describing what you see: what it is, any notable details (color, brand, text, condition), and one piece of useful context. No lists, no markdown, no headings. Speak directly to the user.
         """;
 
     var body = new
@@ -280,6 +296,33 @@ app.MapPost("/api/speak", async (SpeakRequest req, IHttpClientFactory factory, A
     return Results.Bytes(audioBytes, "audio/mpeg");
 });
 
+// ── GET    /api/context       — list all entries ─────────────────────────────
+app.MapGet("/api/context", async (ContextService ctx) =>
+    Results.Ok(await ctx.ListAllAsync()));
+
+// ── GET    /api/context/{key} — fetch one entry ──────────────────────────────
+app.MapGet("/api/context/{key}", async (string key, ContextService ctx) =>
+{
+    var entry = await ctx.FindAsync(Uri.UnescapeDataString(key));
+    return entry is not null ? Results.Ok(entry) : Results.NotFound();
+});
+
+// ── POST   /api/context       — upsert an entry ──────────────────────────────
+app.MapPost("/api/context", async (ContextUpsertRequest req, ContextService ctx) =>
+{
+    if (string.IsNullOrWhiteSpace(req.Key))
+        return Results.BadRequest("Key is required.");
+    await ctx.UpsertAsync(req.Key.Trim(), req.JsonData ?? "{}");
+    return Results.Ok(new { req.Key });
+});
+
+// ── DELETE /api/context/{key} — remove an entry ──────────────────────────────
+app.MapDelete("/api/context/{key}", async (string key, ContextService ctx) =>
+{
+    await ctx.DeleteAsync(Uri.UnescapeDataString(key));
+    return Results.NoContent();
+});
+
 app.Run();
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
@@ -337,6 +380,7 @@ static (string question, string answer) ParseGeminiJson(string raw)
 // ── DTOs ─────────────────────────────────────────────────────────────────────
 
 record VisionRequest(string ImageBase64);
+record ContextUpsertRequest(string Key, string? JsonData);
 
 record GeminiAskRequest(
     string      AudioBase64,
