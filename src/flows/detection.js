@@ -5,6 +5,7 @@ import { getState, setState } from '../state.js';
 import { speak } from '../services/elevenlabs.js';
 import { detectObjectColor } from '../core/color.js';
 
+
 /**
  * @param {{
  *   videoEl: HTMLVideoElement,
@@ -30,7 +31,6 @@ export function createDetectionFlow({ videoEl, yolo, tracker }) {
           const dets    = await yolo.detect(videoEl);
           const tracked = tracker.update(dets);
           setState({ objects: tracked });
-          checkGuardian(tracked);
           checkMinigame(tracked);
         } catch (err) {
           console.warn('detect error', err);
@@ -50,25 +50,6 @@ export function createDetectionFlow({ videoEl, yolo, tracker }) {
   }
 
   // ── Passive feature checks (run every detection tick) ───────────────────
-
-  function checkGuardian(tracked) {
-    const s = getState();
-    if (s.speaking || s.thinking || s.recording) return;
-    if (Date.now() - s.guardianCooldown <= 15000) return;
-
-    const hazard = tracked.find(o =>
-      o.label === 'knife' ||
-      o.label === 'scissors' ||
-      (o.label === 'person' && o.box.h > 0.5)
-    );
-    if (!hazard) return;
-
-    setState({ guardianCooldown: Date.now(), speaking: true });
-    const label = hazard.label === 'person' ? 'person is very close' : hazard.label;
-    speak({ voiceId: s.settings.elevenVoiceId, text: `Warning, safety hazard detected: a ${label} is nearby.` })
-      .finally(() => setState({ speaking: false }))
-      .catch(e => { console.warn(e); setState({ speaking: false }); });
-  }
 
   function checkMinigame(tracked) {
     const s = getState();

@@ -14,7 +14,8 @@
     "tunnel": "ngrok http 5173"
   },
   "dependencies": {
-    "onnxruntime-web": "^1.19.2"
+    "onnxruntime-web": "^1.19.2",
+    "qrcode": "^1.5.4"
   },
   "devDependencies": {
     "vite": "^5.4.10"

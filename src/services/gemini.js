@@ -11,14 +11,30 @@ export async function answerSpokenQuestion({
   imageBase64,
   detectedLabels = [],
   visionResults = null,
+  userId = null,
 }) {
   const res = await fetch('/api/gemini/ask', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ audioBase64, audioMime, imageBase64, detectedLabels, visionResults }),
+    body: JSON.stringify({ audioBase64, audioMime, imageBase64, detectedLabels, visionResults, userId }),
   });
   if (!res.ok) throw new Error(`Gemini ${res.status}: ${await res.text()}`);
   return res.json(); // { question, answer }
+}
+
+/**
+ * Describe the full scene without a specific focus object.
+ * Returns a plain string.
+ */
+export async function describeScene({ imageBase64, visionResults = null }) {
+  const res = await fetch('/api/gemini/scene', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ imageBase64, visionResults }),
+  });
+  if (!res.ok) throw new Error(`Gemini ${res.status}: ${await res.text()}`);
+  const { text } = await res.json();
+  return text;
 }
 
 /**

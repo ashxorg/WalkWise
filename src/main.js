@@ -13,9 +13,13 @@ import { mountBottomBar }    from './ui/bottomBar.js';
 import { mountDetailPanel }  from './ui/detailPanel.js';
 import { mountSettings }     from './ui/settingsModal.js';
 import { mountGameButton }   from './ui/gameButton.js';
+import { mountAuthModal, showAuthModal }   from './ui/authModal.js';
+import { mountProfilePanel, mountProfileButton, openProfile } from './ui/profilePanel.js';
+import { mountQuestVerifyModal } from './ui/questVerifyModal.js';
 import { createDetectionFlow } from './flows/detection.js';
 import { createMicFlow }       from './flows/micFlow.js';
 import { createTapFlow }       from './flows/tapFlow.js';
+import { createDescribeFlow }  from './flows/describeFlow.js';
 import { getState, setState, showToast } from './state.js';
 import { stopSpeaking } from './services/elevenlabs.js';
 import { friendlyError } from './utils.js';
@@ -78,17 +82,23 @@ const recorder = new AudioRecorder();
 const overlay = new Overlay(canvasEl, videoEl, obj => handleTap(obj));
 
 /* ── Flows ────────────────────────────────────────────────────────────────── */
-const detection = createDetectionFlow({ videoEl, yolo, tracker });
-const micFlow   = createMicFlow(recorder, camera);
-const handleTap = createTapFlow(overlay, camera);
+const detection    = createDetectionFlow({ videoEl, yolo, tracker });
+const micFlow      = createMicFlow(recorder, camera);
+const handleTap    = createTapFlow(overlay, camera);
+const describeScene = createDescribeFlow(camera);
 
 /* ── UI modules ───────────────────────────────────────────────────────────── */
 mountHud({ stateEl, objCount, toastEl, heroEl, overlay });
 mountSettings(stage);
 mountGameButton(stage);
 mountDetailPanel(stage);
+mountAuthModal(stage);
+mountProfilePanel(stage);
+mountQuestVerifyModal(stage, camera);
+mountProfileButton(stage, () => openProfile());
 mountBottomBar(stage, {
   onStartToggle: () => toggleStart(),
+  onDescribe:    () => describeScene(),
   onMicToggle:   () => toggleMic(),
 });
 
@@ -132,6 +142,11 @@ async function toggleMic() {
   if (!getState().running) return;
   if (getState().recording) await micFlow.stop();
   else await micFlow.start();
+}
+
+/* ── Auth gate ────────────────────────────────────────────────────────────── */
+if (!getState().currentUser) {
+  showAuthModal();
 }
 
 /* ── Lifecycle ────────────────────────────────────────────────────────────── */

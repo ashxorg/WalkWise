@@ -55,6 +55,7 @@ export function createMicFlow(recorder, camera) {
 
       const { question, answer } = await answerSpokenQuestion({
         audioBase64, audioMime: mimeType, imageBase64, detectedLabels, visionResults,
+        userId: getState().currentUser?.id ?? null,
       });
 
       setState({

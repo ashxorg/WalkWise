@@ -1,8 +1,8 @@
-// bottomBar.js — two pill buttons (Start/Stop and Mic) in a frosted bottom bar.
+// bottomBar.js — three pill buttons: Start/Stop, Look (describe scene), Ask (mic).
 
 import { getState, subscribe } from '../state.js';
 
-export function mountBottomBar(parent, { onStartToggle, onMicToggle }) {
+export function mountBottomBar(parent, { onStartToggle, onMicToggle, onDescribe }) {
   const bar = document.createElement('div');
   bar.className = 'bottom-bar';
   bar.innerHTML = `
@@ -14,6 +14,14 @@ export function mountBottomBar(parent, { onStartToggle, onMicToggle }) {
           </svg>
         </span>
         <span class="pill-label">Start</span>
+      </button>
+      <button class="pill pill-look" type="button" aria-label="Look" disabled>
+        <span class="pill-glyph">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+            <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="currentColor"/>
+          </svg>
+        </span>
+        <span class="pill-label">Look</span>
       </button>
       <button class="pill pill-mic" type="button" aria-label="Ask" disabled>
         <span class="pill-glyph">
@@ -29,9 +37,12 @@ export function mountBottomBar(parent, { onStartToggle, onMicToggle }) {
   parent.appendChild(bar);
 
   const startBtn = bar.querySelector('.pill-start');
-  const micBtn = bar.querySelector('.pill-mic');
+  const lookBtn  = bar.querySelector('.pill-look');
+  const micBtn   = bar.querySelector('.pill-mic');
+
   startBtn.addEventListener('click', () => onStartToggle?.());
-  micBtn.addEventListener('click', () => onMicToggle?.());
+  lookBtn.addEventListener('click',  () => onDescribe?.());
+  micBtn.addEventListener('click',   () => onMicToggle?.());
 
   function render(s) {
     // Start button
@@ -44,14 +55,21 @@ export function mountBottomBar(parent, { onStartToggle, onMicToggle }) {
     }
     startBtn.classList.toggle('is-on', s.running);
 
-    // Mic button
-    micBtn.disabled = !s.running || s.loading;
+    const busy = s.thinking || s.speaking || s.recording;
+
+    // Look button — disabled while anything is happening
+    lookBtn.disabled = !s.running || s.loading || busy;
+    lookBtn.classList.toggle('is-thinking', s.thinking && !s.recording);
+    lookBtn.querySelector('.pill-label').textContent = (s.thinking && !s.recording) ? 'Scanning' : 'Look';
+
+    // Mic button — stays enabled while recording so tapping again stops it
+    micBtn.disabled = !s.running || s.loading || s.thinking || s.speaking;
     micBtn.classList.toggle('is-recording', s.recording);
     micBtn.classList.toggle('is-thinking', s.thinking && !s.recording);
-    if (s.recording) micBtn.querySelector('.pill-label').textContent = 'Listening';
-    else if (s.thinking) micBtn.querySelector('.pill-label').textContent = 'Thinking';
-    else if (s.speaking) micBtn.querySelector('.pill-label').textContent = 'Speaking';
-    else micBtn.querySelector('.pill-label').textContent = 'Ask';
+    if (s.recording)                        micBtn.querySelector('.pill-label').textContent = 'Listening';
+    else if (s.thinking && !s.recording)    micBtn.querySelector('.pill-label').textContent = 'Thinking';
+    else if (s.speaking)                    micBtn.querySelector('.pill-label').textContent = 'Speaking';
+    else                                    micBtn.querySelector('.pill-label').textContent = 'Ask';
   }
 
   render(getState());

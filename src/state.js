@@ -16,10 +16,12 @@ let state = {
   gameActive: false,
   targetColor: null,
   guardianCooldown: 0,
+  currentUser: loadCurrentUser(),
   settings: loadSettings(),
 };
 
-const KEY = 'walkwise.settings.v3';
+const KEY      = 'walkwise.settings.v3';
+const USER_KEY = 'walkwise.user.v1';
 
 function loadSettings() {
   let stored = {};
@@ -38,8 +40,23 @@ function defaults() {
   };
 }
 
+function loadCurrentUser() {
+  try {
+    const raw = localStorage.getItem(USER_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch { return null; }
+}
+
 function persistSettings(s) {
   try { localStorage.setItem(KEY, JSON.stringify(s)); } catch {}
+}
+
+export function setCurrentUser(user) {
+  try {
+    if (user) localStorage.setItem(USER_KEY, JSON.stringify(user));
+    else localStorage.removeItem(USER_KEY);
+  } catch {}
+  setState({ currentUser: user });
 }
 
 export function getState() { return state; }
