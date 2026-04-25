@@ -1,9 +1,8 @@
-// settingsModal.js — preferences modal.
-// API keys come from build-time env vars; this modal is for tweakable
-// preferences (FPS, voice override, speak-on-tap). Key fields are shown
-// only as a fallback when the env vars aren't set.
+// settingsModal.js — user preferences modal.
+// API keys are managed by the server. This modal only exposes tweakable
+// preferences: detection FPS, ElevenLabs voice ID override, and speak-on-tap.
 
-import { getState, setState, subscribe, hasAllKeys, KEYS_FROM_ENV, ENV_KEYS } from '../state.js';
+import { getState, setState, subscribe } from '../state.js';
 import { ELEVENLABS_DEFAULT_VOICE_ID } from '../services/elevenlabs.js';
 
 let modalEl, gearBtn;
@@ -26,8 +25,6 @@ export function mountSettings(parent) {
   modalEl.className = 'modal';
   modalEl.setAttribute('aria-hidden', 'true');
 
-  const keysSection = KEYS_FROM_ENV ? envKeysBlock() : userKeysBlock();
-
   modalEl.innerHTML = `
     <div class="modal-scrim"></div>
     <div class="modal-card" role="dialog" aria-label="Settings">
@@ -41,7 +38,15 @@ export function mountSettings(parent) {
         </button>
       </div>
       <div class="modal-body">
-        ${keysSection}
+        <div class="status-card">
+          <div class="status-card-title">
+            <span class="dp-diamond"></span>
+            <span>READY</span>
+          </div>
+          <p class="status-card-text">
+            API keys are configured on the server. Just press <span class="kbd">Start</span> to begin.
+          </p>
+        </div>
 
         <div class="section-divider"></div>
 
@@ -76,55 +81,6 @@ export function mountSettings(parent) {
   modalEl.querySelector('[data-action="save"]').addEventListener('click', () => save());
 
   hydrate();
-  subscribe(() => {
-    const missing = !KEYS_FROM_ENV && !hasAllKeys();
-    gearBtn.classList.toggle('needs-attention', missing);
-  });
-
-  if (!KEYS_FROM_ENV && !hasAllKeys()) {
-    requestAnimationFrame(() => open());
-  }
-}
-
-function envKeysBlock() {
-  return `
-    <div class="status-card">
-      <div class="status-card-title">
-        <span class="dp-diamond"></span>
-        <span>READY</span>
-      </div>
-      <p class="status-card-text">
-        API keys are configured in the deployment. Just press <span class="kbd">Start</span> on the main screen.
-      </p>
-    </div>
-  `;
-}
-
-function userKeysBlock() {
-  return `
-    <p class="modal-intro">
-      WalkWise needs three keys to work. They're stored only on this device (localStorage)
-      and sent directly to each service from your browser.
-    </p>
-
-    <label class="field">
-      <span class="field-label">Google Vision API key</span>
-      <input type="password" autocomplete="off" data-key="visionKey" placeholder="AIza…" />
-      <span class="field-hint">From Google Cloud Console — enable the <em>Cloud Vision API</em>.</span>
-    </label>
-
-    <label class="field">
-      <span class="field-label">Gemini API key</span>
-      <input type="password" autocomplete="off" data-key="geminiKey" placeholder="AIza…" />
-      <span class="field-hint">From <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener">aistudio.google.com</a> — free tier works.</span>
-    </label>
-
-    <label class="field">
-      <span class="field-label">ElevenLabs API key</span>
-      <input type="password" autocomplete="off" data-key="elevenKey" placeholder="sk_…" />
-      <span class="field-hint">From elevenlabs.io → Profile → API Keys.</span>
-    </label>
-  `;
 }
 
 function hydrate() {
@@ -155,7 +111,7 @@ function save() {
     else if (input.type === 'number') s[k] = Math.max(1, Math.min(10, Number(input.value) || 3));
     else s[k] = input.value.trim();
   }
-  if (!s.elevenVoiceId) s.elevenVoiceId = ENV_KEYS.elevenVoiceId || ELEVENLABS_DEFAULT_VOICE_ID;
+  if (!s.elevenVoiceId) s.elevenVoiceId = ELEVENLABS_DEFAULT_VOICE_ID;
   setState({ settings: s });
   close();
 }

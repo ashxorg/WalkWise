@@ -1,19 +1,6 @@
 // state.js — tiny pub/sub store. No framework.
-//
-// API keys come from Vite env vars baked in at build time (VITE_*). The
-// settings modal still exists for user-tunable preferences (FPS, voice ID
-// override, speak-on-tap), and those preferences persist in localStorage.
-
-// Build-time keys (inlined by Vite from .env / Vercel env vars).
-export const ENV_KEYS = {
-  visionKey:     (import.meta.env.VITE_GOOGLE_VISION_API_KEY || '').trim(),
-  geminiKey:     (import.meta.env.VITE_GEMINI_API_KEY || '').trim(),
-  elevenKey:     (import.meta.env.VITE_ELEVENLABS_API_KEY || '').trim(),
-  elevenVoiceId: (import.meta.env.VITE_ELEVENLABS_VOICE_ID || 'EXAVITQu4vr4xnSDxMaL').trim(),
-};
-
-export const KEYS_FROM_ENV =
-  Boolean(ENV_KEYS.visionKey && ENV_KEYS.geminiKey && ENV_KEYS.elevenKey);
+// API keys are now managed by the ASP.NET server (WalkWise.Api).
+// Settings stored here are user preferences only (FPS, voice ID, speak-on-tap).
 
 const listeners = new Set();
 let state = {
@@ -32,7 +19,7 @@ let state = {
   settings: loadSettings(),
 };
 
-const KEY = 'walkwise.settings.v2';
+const KEY = 'walkwise.settings.v3';
 
 function loadSettings() {
   let stored = {};
@@ -40,36 +27,19 @@ function loadSettings() {
     const raw = localStorage.getItem(KEY);
     if (raw) stored = JSON.parse(raw);
   } catch {}
-  return mergeWithEnv({ ...defaults(), ...stored });
-}
-
-function mergeWithEnv(s) {
-  const out = { ...s };
-  if (ENV_KEYS.visionKey) out.visionKey = ENV_KEYS.visionKey;
-  if (ENV_KEYS.geminiKey) out.geminiKey = ENV_KEYS.geminiKey;
-  if (ENV_KEYS.elevenKey) out.elevenKey = ENV_KEYS.elevenKey;
-  if (!out.elevenVoiceId) out.elevenVoiceId = ENV_KEYS.elevenVoiceId;
-  return out;
+  return { ...defaults(), ...stored };
 }
 
 function defaults() {
   return {
-    geminiKey: '',
-    visionKey: '',
-    elevenKey: '',
-    elevenVoiceId: ENV_KEYS.elevenVoiceId,
+    elevenVoiceId: 'EXAVITQu4vr4xnSDxMaL',
     detectionFps: 3,
     speakOnTap: true,
   };
 }
 
 function persistSettings(s) {
-  // Don't persist env-provided keys to localStorage — they live in the bundle.
-  const toStore = { ...s };
-  if (ENV_KEYS.visionKey) toStore.visionKey = '';
-  if (ENV_KEYS.geminiKey) toStore.geminiKey = '';
-  if (ENV_KEYS.elevenKey) toStore.elevenKey = '';
-  try { localStorage.setItem(KEY, JSON.stringify(toStore)); } catch {}
+  try { localStorage.setItem(KEY, JSON.stringify(s)); } catch {}
 }
 
 export function getState() { return state; }
@@ -96,8 +66,4 @@ export function showToast(kind, message, ttl = 3500) {
       if (cur && cur.message === message) setState({ toast: null });
     }, ttl);
   }
-}
-
-export function hasAllKeys(s = state.settings) {
-  return Boolean(s.geminiKey && s.visionKey && s.elevenKey);
 }

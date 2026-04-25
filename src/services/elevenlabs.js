@@ -1,8 +1,7 @@
-// elevenlabs.js — text-to-speech via ElevenLabs REST API.
-// Returns an Audio element that's already playing.
+// elevenlabs.js — proxies to the ASP.NET /api/speak endpoint.
+// The server holds the ElevenLabs API key.
 
-const DEFAULT_VOICE_ID = 'EXAVITQu4vr4xnSDxMaL'; // "Sarah" — clear, neutral, default ElevenLabs voice
-const DEFAULT_MODEL = 'eleven_turbo_v2_5';
+export const ELEVENLABS_DEFAULT_VOICE_ID = 'EXAVITQu4vr4xnSDxMaL'; // "Sarah"
 
 let _currentAudio = null;
 
@@ -16,45 +15,24 @@ export function stopSpeaking() {
 }
 
 /**
- * Speak the given text. Returns a Promise that resolves when playback ends
- * (or rejects on network/decode error).
+ * Speak the given text via the server proxy.
+ * Returns a Promise that resolves when playback ends.
  */
-export async function speak({
-  apiKey,
-  text,
-  voiceId = DEFAULT_VOICE_ID,
-  modelId = DEFAULT_MODEL,
-}) {
-  if (!apiKey) throw new Error('Missing ElevenLabs API key');
+export async function speak({ text, voiceId = ELEVENLABS_DEFAULT_VOICE_ID }) {
   if (!text) return;
 
-  // Stop anything currently playing first
   stopSpeaking();
 
-  const url = `https://api.elevenlabs.io/v1/text-to-speech/${encodeURIComponent(voiceId)}?optimize_streaming_latency=2&output_format=mp3_44100_128`;
-  const res = await fetch(url, {
+  const res = await fetch('/api/speak', {
     method: 'POST',
-    headers: {
-      'xi-api-key': apiKey,
-      'content-type': 'application/json',
-      'accept': 'audio/mpeg',
-    },
-    body: JSON.stringify({
-      text,
-      model_id: modelId,
-      voice_settings: {
-        stability: 0.45,
-        similarity_boost: 0.75,
-        style: 0.2,
-        use_speaker_boost: true,
-      },
-    }),
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ text, voiceId }),
   });
-  if (!res.ok) throw new Error(`ElevenLabs ${res.status}: ${await res.text()}`);
+  if (!res.ok) throw new Error(`Speak ${res.status}: ${await res.text()}`);
 
-  const blob = await res.blob();
+  const blob   = await res.blob();
   const objUrl = URL.createObjectURL(blob);
-  const audio = new Audio(objUrl);
+  const audio  = new Audio(objUrl);
   audio.preload = 'auto';
   _currentAudio = audio;
 
@@ -72,5 +50,3 @@ export async function speak({
     audio.play().catch(reject);
   });
 }
-
-export const ELEVENLABS_DEFAULT_VOICE_ID = DEFAULT_VOICE_ID;

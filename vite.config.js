@@ -22,6 +22,13 @@ export default defineConfig({
     strictPort: false,
     // Allow ngrok / any tunnel hostname to hit the dev server
     allowedHosts: true,
+    proxy: {
+      // Forward /api/* to the ASP.NET backend in development
+      '/api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+      },
+    },
     headers: {
       // COOP/COEP enable cross-origin isolation, which lets ORT pick up
       // SharedArrayBuffer when available. Single-thread WASM still works

@@ -18,6 +18,16 @@ dist-ssr
 .env.*.local
 .vercel
 
+# ASP.NET server — build artifacts and local dev secrets
+WalkWise.Api/bin/
+WalkWise.Api/obj/
+WalkWise.Api/appsettings.Development.json
+
+# SQLite speech cache database
+WalkWise.Api/*.db
+WalkWise.Api/*.db-shm
+WalkWise.Api/*.db-wal
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

@@ -10,7 +10,7 @@ import { Overlay } from './ui/overlay.js';
 import { mountBottomBar } from './ui/bottomBar.js';
 import { mountDetailPanel } from './ui/detailPanel.js';
 import { mountSettings } from './ui/settingsModal.js';
-import { getState, setState, subscribe, showToast, hasAllKeys } from './state.js';
+import { getState, setState, subscribe, showToast } from './state.js';
 import { analyzeImage } from './services/vision.js';
 import { answerSpokenQuestion, describeObject } from './services/gemini.js';
 import { speak, stopSpeaking } from './services/elevenlabs.js';
@@ -121,11 +121,6 @@ async function toggleStart() {
     stopAll();
     return;
   }
-  if (!hasAllKeys(s.settings)) {
-    showToast('error', 'API keys are missing — open Settings to add them.');
-    document.querySelector('.gear-btn')?.click();
-    return;
-  }
   try {
     setState({ loading: true, loadingMessage: 'Starting camera…' });
     await camera.start();
@@ -187,7 +182,6 @@ function runLoop() {
             if (hazard) {
               setState({ guardianCooldown: nowTs, speaking: true });
               speak({
-                apiKey: s.settings.elevenKey,
                 voiceId: s.settings.elevenVoiceId,
                 text: `Warning, safety hazard detected: a ${hazard.label === 'person' ? 'person is very close' : hazard.label} is nearby.`
               }).finally(() => setState({ speaking: false })).catch(e => {
@@ -204,7 +198,6 @@ function runLoop() {
               if (color === s.targetColor) {
                 setState({ gameActive: false, targetColor: null, speaking: true });
                 speak({
-                  apiKey: s.settings.elevenKey,
                   voiceId: s.settings.elevenVoiceId,
                   text: `Great job! You found a ${color} ${o.label}!`
                 }).finally(() => setState({ speaking: false })).catch(e => {
@@ -275,16 +268,12 @@ async function stopRecordingAndAnswer() {
     // Optional Vision pass for richer grounding (only if there's anything to look at)
     let visionResults = null;
     try {
-      visionResults = await analyzeImage({
-        apiKey: getState().settings.visionKey,
-        imageBase64,
-      });
+      visionResults = await analyzeImage({ imageBase64 });
     } catch (e) {
       console.warn('Vision call failed (continuing without it):', e);
     }
 
     const { question, answer } = await answerSpokenQuestion({
-      apiKey: getState().settings.geminiKey,
       audioBase64,
       audioMime: mimeType,
       imageBase64,
@@ -306,7 +295,6 @@ async function stopRecordingAndAnswer() {
 
     try {
       await speak({
-        apiKey: getState().settings.elevenKey,
         voiceId: getState().settings.elevenVoiceId,
         text: answer,
       });
@@ -339,16 +327,12 @@ async function onObjectTap(obj) {
   try {
     let visionResults = null;
     try {
-      visionResults = await analyzeImage({
-        apiKey: settings.visionKey,
-        imageBase64: stripDataUrl(cropped || fullSnap),
-      });
+      visionResults = await analyzeImage({ imageBase64: stripDataUrl(cropped || fullSnap) });
     } catch (e) {
       console.warn('Vision call failed (continuing without it):', e);
     }
     
     const text = await describeObject({
-      apiKey: settings.geminiKey,
       label: obj.label,
       imageBase64: stripDataUrl(cropped || fullSnap),
       visionResults,
@@ -366,7 +350,6 @@ async function onObjectTap(obj) {
       setState({ speaking: true });
       try {
         await speak({
-          apiKey: settings.elevenKey,
           voiceId: settings.elevenVoiceId,
           text,
         });
