@@ -1,0 +1,22 @@
+{
+  "name": "walkwise",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "WalkWise — real-time AR-style object detection with voice Q&A.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && node scripts/clean-wasm.js",
+    "preview": "vite preview",
+    "fetch-model": "node scripts/fetch-model.js",
+    "copy-ort-assets": "node scripts/copy-ort-assets.js",
+    "prepare": "node scripts/copy-ort-assets.js",
+    "tunnel": "ngrok http 5173"
+  },
+  "dependencies": {
+    "onnxruntime-web": "^1.19.2"
+  },
+  "devDependencies": {
+    "vite": "^5.4.10"
+  }
+}
