@@ -6,6 +6,7 @@ import { analyzeImage } from '../services/vision.js';
 import { describeObject } from '../services/gemini.js';
 import { speak } from '../services/elevenlabs.js';
 import { stripDataUrl, friendlyError } from '../utils.js';
+import { getObjectProperties } from '../services/userService.js';
 
 /**
  * @param {import('../ui/overlay.js').Overlay} overlay
@@ -27,19 +28,19 @@ export function createTapFlow(overlay, camera) {
       try { visionResults = await analyzeImage({ imageBase64: stripDataUrl(imgSource) }); }
       catch (e) { console.warn('Vision call failed (continuing):', e); }
 
-      const text = await describeObject({
-        label: obj.label,
-        imageBase64: stripDataUrl(imgSource),
-        visionResults,
-      });
+      const [text, properties] = await Promise.all([
+        describeObject({ label: obj.label, imageBase64: stripDataUrl(imgSource), visionResults }),
+        getObjectProperties(obj.label).catch(() => ({})),
+      ]);
 
       setState({
         detail: {
-          label:   obj.label,
-          image:   imgSource,
+          label:      obj.label,
+          image:      imgSource,
           text,
-          tags:    visionResults?.labels?.slice(0, 6).map(l => l.description) ?? [],
-          loading: false,
+          tags:       visionResults?.labels?.slice(0, 6).map(l => l.description) ?? [],
+          properties,
+          loading:    false,
         },
       });
 

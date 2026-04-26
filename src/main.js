@@ -15,6 +15,7 @@ import { mountSettings }     from './ui/settingsModal.js';
 import { mountGameButton }   from './ui/gameButton.js';
 import { mountAuthModal, showAuthModal }   from './ui/authModal.js';
 import { mountProfilePanel, mountProfileButton, openProfile } from './ui/profilePanel.js';
+import { mountExpBar } from './ui/expBar.js';
 import { mountQuestVerifyModal } from './ui/questVerifyModal.js';
 import { createDetectionFlow } from './flows/detection.js';
 import { createMicFlow }       from './flows/micFlow.js';
@@ -89,6 +90,7 @@ const describeScene = createDescribeFlow(camera);
 
 /* ── UI modules ───────────────────────────────────────────────────────────── */
 mountHud({ stateEl, objCount, toastEl, heroEl, overlay });
+mountExpBar(stage);
 mountSettings(stage);
 mountGameButton(stage);
 mountDetailPanel(stage);

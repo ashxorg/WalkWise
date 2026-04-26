@@ -482,6 +482,99 @@ a { color: var(--accent); }
   border: 1px solid var(--border-strong);
 }
 
+/* ----------------- object properties table ----------------- */
+.dp-props {
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.dp-prop-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 5px 10px;
+  border-bottom: 1px solid var(--border);
+}
+.dp-prop-row:last-child { border-bottom: none; }
+.dp-prop-key {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.07em;
+  color: var(--accent);
+  flex: 0 0 auto;
+  min-width: 90px;
+  opacity: 0.85;
+  text-transform: uppercase;
+}
+.dp-prop-val {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--fg);
+  opacity: 0.75;
+  flex: 1;
+  line-height: 1.4;
+}
+
+/* ----------------- vertical exp bar ----------------- */
+.exp-bar-wrap {
+  position: fixed;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  z-index: 50;
+  pointer-events: none;
+  user-select: none;
+}
+.exp-bar-wrap.is-visible { display: flex; }
+.exp-bar-lv-label {
+  font-family: var(--mono);
+  font-size: 7px;
+  letter-spacing: 0.12em;
+  color: rgba(139,206,81,0.45);
+  text-transform: uppercase;
+}
+.exp-bar-level {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+  text-shadow: 0 0 8px rgba(139,206,81,0.6);
+}
+.exp-bar-track {
+  width: 4px;
+  height: 110px;
+  background: rgba(139,206,81,0.12);
+  border-radius: 2px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  border: 1px solid rgba(139,206,81,0.18);
+}
+.exp-bar-fill {
+  width: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: height 0.7s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: 0 0 6px rgba(139,206,81,0.7);
+}
+.exp-bar-label {
+  font-family: var(--mono);
+  font-size: 7px;
+  letter-spacing: 0.12em;
+  color: rgba(139,206,81,0.35);
+  text-transform: uppercase;
+}
+
 /* ----------------- settings modal ----------------- */
 .modal {
   position: fixed; inset: 0;

@@ -121,7 +121,7 @@ static class GeminiEndpoints
 
                 The user tapped on an object detected as "{req.Label}".{visionBlurb}{qrBlock}
 
-                TASK: Look at the cropped image and write 2-4 short sentences describing what you see: what it is, any notable details (color, brand, text, condition), and one piece of useful context. No lists, no markdown, no headings. Speak directly to the user.
+                TASK: Look at the cropped image and write exactly 1-2 sentences. State what it is and one key detail (color, brand, text, or condition). No filler, no markdown, no preamble. Speak directly to the user.
                 """;
 
             var body = new

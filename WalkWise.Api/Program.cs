@@ -31,6 +31,7 @@ builder.Services.AddDbContext<ContextDbContext>(opt =>
     opt.UseSqlite(builder.Configuration.GetConnectionString("ContextStore") ?? "Data Source=context-store.db"));
 
 builder.Services.AddSingleton<QrScanService>();
+builder.Services.AddSingleton<ObjectPropertyService>();
 builder.Services.AddScoped<ContextService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ConversationService>();
@@ -52,5 +53,6 @@ app.MapContextEndpoints();
 app.MapAuthEndpoints();
 app.MapUserEndpoints();
 app.MapQuestEndpoints();
+app.MapObjectEndpoints();
 
 app.Run();

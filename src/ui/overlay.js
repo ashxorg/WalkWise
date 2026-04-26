@@ -213,10 +213,13 @@ function drawConnector(ctx, it) {
 function drawLabel(ctx, it) {
   const { x, y, w, h } = it.label;
   ctx.save();
-  // Frosted card
+  // Frosted card with green glow
+  ctx.shadowColor = ACCENT_GLOW;
+  ctx.shadowBlur  = 18;
   ctx.fillStyle = LABEL_BG;
   roundRect(ctx, x, y, w, h, 6);
   ctx.fill();
+  ctx.shadowBlur = 0;
 
   // Border + corner accents
   ctx.strokeStyle = ACCENT_DIM;

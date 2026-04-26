@@ -28,9 +28,12 @@ export function mountDetailPanel(parent) {
         </div>
       </div>
       <div class="dp-body">
-        <div class="dp-section-title">DESCRIPTION</div>
+        <div class="dp-section-title dp-props-title">PROPERTIES</div>
+        <div class="dp-props" data-props></div>
+        <div class="dp-section-title" style="margin-top:14px">DESCRIPTION</div>
         <div class="dp-text"></div>
         <div class="dp-tags"></div>
+        
       </div>
     </div>
   `;
@@ -43,6 +46,8 @@ export function mountDetailPanel(parent) {
   const emptyEl = panel.querySelector('.dp-image-empty');
   const textEl = panel.querySelector('.dp-text');
   const tagsEl = panel.querySelector('.dp-tags');
+  const propsEl = panel.querySelector('[data-props]');
+  const propsTitleEl = panel.querySelector('.dp-props-title');
 
   const close = () => setState({ detail: null });
   scrim.addEventListener('click', close);
@@ -76,6 +81,24 @@ export function mountDetailPanel(parent) {
         tagsEl.appendChild(el);
       }
     }
+
+    const entries = d.properties ? Object.entries(d.properties) : [];
+    if (entries.length) {
+      propsTitleEl.style.display = '';
+      propsEl.innerHTML = entries.map(([k, v]) =>
+        `<div class="dp-prop-row">
+          <span class="dp-prop-key">${esc(k)}</span>
+          <span class="dp-prop-val">${esc(v)}</span>
+        </div>`
+      ).join('');
+    } else {
+      propsTitleEl.style.display = 'none';
+      propsEl.innerHTML = '';
+    }
+  }
+
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 
   render(getState());

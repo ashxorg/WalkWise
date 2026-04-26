@@ -1,0 +1,481 @@
+{
+  "person": {
+    "Category": "Living being",
+    "Species": "Homo sapiens",
+    "Typical Height": "1.5 – 1.9 m",
+    "Average Mass": "60 – 90 kg"
+  },
+  "bicycle": {
+    "Category": "Non-motorized vehicle",
+    "Propulsion": "Human-powered",
+    "Typical Wheels": "2",
+    "Common Material": "Steel / Aluminium"
+  },
+  "car": {
+    "Category": "Motor vehicle",
+    "Propulsion": "Combustion / Electric",
+    "Typical Seats": "2 – 5",
+    "Typical Mass": "1,300 – 2,200 kg"
+  },
+  "motorcycle": {
+    "Category": "Two-wheeled motor vehicle",
+    "Propulsion": "Internal combustion",
+    "Typical Engine": "100 – 1,800 cc",
+    "Typical Mass": "150 – 350 kg"
+  },
+  "airplane": {
+    "Category": "Fixed-wing aircraft",
+    "Propulsion": "Jet / Turboprop",
+    "Cruising Speed": "800 – 900 km/h",
+    "Cruising Altitude": "9,000 – 12,000 m"
+  },
+  "bus": {
+    "Category": "Mass-transit vehicle",
+    "Capacity": "40 – 80 passengers",
+    "Typical Length": "12 – 18 m",
+    "Power Source": "Diesel / Electric"
+  },
+  "train": {
+    "Category": "Rail vehicle",
+    "Guidance": "Steel rails",
+    "Max Speed": "60 – 350 km/h",
+    "Power Source": "Electric / Diesel"
+  },
+  "truck": {
+    "Category": "Heavy goods vehicle",
+    "Payload": "Up to 20 t",
+    "Typical Length": "8 – 20 m",
+    "Power Source": "Diesel"
+  },
+  "boat": {
+    "Category": "Watercraft",
+    "Medium": "Water surface",
+    "Propulsion": "Sail / Motor / Oar",
+    "Hull Material": "Fiberglass / Steel / Wood"
+  },
+  "traffic light": {
+    "Category": "Traffic control device",
+    "Signal Colors": "Red, Yellow, Green",
+    "Standard Height": "5 – 6 m",
+    "Power": "Mains electric"
+  },
+  "fire hydrant": {
+    "Category": "Fire-fighting infrastructure",
+    "Outlet Pressure": "150 – 1,700 kPa",
+    "Material": "Cast iron / Ductile iron",
+    "Color (US)": "Typically red or yellow"
+  },
+  "stop sign": {
+    "Category": "Regulatory traffic sign",
+    "Shape": "Octagon",
+    "Color": "Red with white border",
+    "Reflectivity": "Retroreflective sheeting"
+  },
+  "parking meter": {
+    "Category": "Parking regulation device",
+    "Payment": "Coins / Card / App",
+    "Typical Height": "1.2 m",
+    "Material": "Aluminum / Steel"
+  },
+  "bench": {
+    "Category": "Outdoor seating",
+    "Typical Length": "1.2 – 1.8 m",
+    "Material": "Wood / Metal / Concrete",
+    "Typical Capacity": "2 – 4 persons"
+  },
+  "bird": {
+    "Category": "Avian animal",
+    "Class": "Aves",
+    "Locomotion": "Flight / Walking",
+    "Body Covering": "Feathers"
+  },
+  "cat": {
+    "Category": "Domestic animal",
+    "Species": "Felis catus",
+    "Lifespan": "12 – 18 years",
+    "Typical Mass": "3 – 5 kg"
+  },
+  "dog": {
+    "Category": "Domestic animal",
+    "Species": "Canis lupus familiaris",
+    "Breeds": "340+ recognized",
+    "Lifespan": "10 – 13 years"
+  },
+  "horse": {
+    "Category": "Large domesticated mammal",
+    "Species": "Equus caballus",
+    "Typical Height": "1.4 – 1.8 m (at shoulder)",
+    "Typical Mass": "380 – 1,000 kg"
+  },
+  "sheep": {
+    "Category": "Livestock",
+    "Species": "Ovis aries",
+    "Primary Products": "Wool, Meat, Milk",
+    "Typical Mass": "45 – 160 kg"
+  },
+  "cow": {
+    "Category": "Livestock",
+    "Species": "Bos taurus",
+    "Primary Products": "Milk, Meat, Leather",
+    "Typical Mass": "400 – 900 kg"
+  },
+  "elephant": {
+    "Category": "Megafauna mammal",
+    "Family": "Elephantidae",
+    "Typical Mass": "3,000 – 6,000 kg",
+    "Lifespan": "60 – 70 years"
+  },
+  "bear": {
+    "Category": "Large omnivorous mammal",
+    "Family": "Ursidae",
+    "Typical Mass": "100 – 680 kg",
+    "Lifespan": "20 – 30 years"
+  },
+  "zebra": {
+    "Category": "Wild equid",
+    "Species": "Equus quagga (plains)",
+    "Distinctive Feature": "Black and white stripes",
+    "Typical Mass": "200 – 450 kg"
+  },
+  "giraffe": {
+    "Category": "Megafauna mammal",
+    "Species": "Giraffa camelopardalis",
+    "Typical Height": "4.5 – 6 m",
+    "Typical Mass": "750 – 1,200 kg"
+  },
+  "backpack": {
+    "Category": "Carrying accessory",
+    "Typical Volume": "15 – 40 L",
+    "Material": "Nylon / Polyester",
+    "Closure": "Zipper"
+  },
+  "umbrella": {
+    "Category": "Weather protection device",
+    "Purpose": "Rain / Sun shielding",
+    "Canopy Material": "Nylon / Polyester",
+    "Frame Material": "Steel / Fiberglass"
+  },
+  "handbag": {
+    "Category": "Fashion accessory / Bag",
+    "Typical Material": "Leather / Fabric",
+    "Closure": "Zipper / Clasp / Magnetic",
+    "Common Use": "Everyday carry"
+  },
+  "tie": {
+    "Category": "Neckwear accessory",
+    "Typical Material": "Silk / Polyester",
+    "Standard Length": "~ 150 cm",
+    "Context": "Formal / Business attire"
+  },
+  "suitcase": {
+    "Category": "Travel luggage",
+    "Typical Material": "Polycarbonate / ABS / Nylon",
+    "Wheel Types": "2-wheel / 4-wheel spinner",
+    "Standard Sizes": "Cabin / Medium / Large"
+  },
+  "frisbee": {
+    "Category": "Sports / Toy disc",
+    "Diameter": "~ 27 cm (standard)",
+    "Material": "Plastic",
+    "Weight": "~ 175 g (ultimate)"
+  },
+  "skis": {
+    "Category": "Snow sport equipment",
+    "Material": "Wood / Carbon fibre / Fibreglass",
+    "Typical Length": "150 – 185 cm",
+    "Binding Type": "Alpine / Nordic"
+  },
+  "snowboard": {
+    "Category": "Snow sport equipment",
+    "Typical Length": "140 – 165 cm",
+    "Material": "Wood core, fibreglass",
+    "Stance": "Regular or Goofy"
+  },
+  "sports ball": {
+    "Category": "Sports equipment",
+    "Materials": "Leather / Rubber / Synthetic",
+    "Common Types": "Football, Basketball, Soccer"
+  },
+  "kite": {
+    "Category": "Aerial toy / Sport",
+    "Frame Material": "Carbon fibre / Fibreglass",
+    "Sail Material": "Ripstop nylon / Polyester",
+    "Lift Principle": "Aerodynamic drag & lift"
+  },
+  "baseball bat": {
+    "Category": "Sports equipment",
+    "Material": "Wood (ash/maple) / Aluminium",
+    "Typical Length": "68 – 91 cm",
+    "Typical Mass": "0.8 – 1.1 kg"
+  },
+  "baseball glove": {
+    "Category": "Sports protective equipment",
+    "Material": "Leather",
+    "Purpose": "Catching pitched balls",
+    "Typical Size": "28 – 33 cm (pocket)"
+  },
+  "skateboard": {
+    "Category": "Recreational / Transport board",
+    "Deck Material": "Maple wood",
+    "Wheel Material": "Polyurethane",
+    "Typical Length": "78 – 82 cm"
+  },
+  "surfboard": {
+    "Category": "Water sport equipment",
+    "Core Material": "Foam (EPS / PU)",
+    "Skin": "Fibreglass / Epoxy",
+    "Typical Length": "1.8 – 3 m"
+  },
+  "tennis racket": {
+    "Category": "Sports equipment",
+    "Frame Material": "Graphite / Composite",
+    "String Material": "Natural gut / Synthetic",
+    "Typical Mass": "270 – 340 g"
+  },
+  "bottle": {
+    "Category": "Liquid container",
+    "Common Materials": "Glass / Plastic / Aluminium",
+    "Common Capacity": "250 mL – 2 L",
+    "Closure": "Cap / Cork / Lid"
+  },
+  "wine glass": {
+    "Category": "Drinking vessel",
+    "Material": "Glass / Crystal",
+    "Typical Capacity": "150 – 600 mL",
+    "Form Factor": "Stem, bowl, base"
+  },
+  "cup": {
+    "Category": "Drinking vessel",
+    "Common Materials": "Ceramic / Plastic / Paper",
+    "Typical Capacity": "150 – 500 mL",
+    "Common Uses": "Hot & cold beverages"
+  },
+  "fork": {
+    "Category": "Eating utensil",
+    "Material": "Stainless steel / Silver",
+    "Typical Tines": "4",
+    "Typical Length": "18 – 21 cm"
+  },
+  "knife": {
+    "Category": "Cutting tool / Utensil",
+    "Blade Material": "Stainless steel",
+    "Edge Types": "Straight / Serrated",
+    "Typical Blade Length": "8 – 30 cm"
+  },
+  "spoon": {
+    "Category": "Eating utensil",
+    "Material": "Stainless steel / Ceramic",
+    "Common Types": "Teaspoon, Tablespoon, Soup",
+    "Typical Length": "13 – 21 cm"
+  },
+  "bowl": {
+    "Category": "Serving / Eating vessel",
+    "Common Materials": "Ceramic / Glass / Plastic",
+    "Typical Capacity": "250 mL – 2 L",
+    "Common Uses": "Soup, cereal, salad"
+  },
+  "banana": {
+    "Category": "Tropical fruit",
+    "Species": "Musa acuminata",
+    "Calories": "~89 kcal / 100 g",
+    "Key Nutrients": "Potassium, Vitamin B6, C"
+  },
+  "apple": {
+    "Category": "Pome fruit",
+    "Species": "Malus domestica",
+    "Calories": "~52 kcal / 100 g",
+    "Key Nutrients": "Fibre, Vitamin C, Antioxidants"
+  },
+  "sandwich": {
+    "Category": "Prepared food",
+    "Base": "Bread / Roll / Wrap",
+    "Common Fillings": "Meat, Cheese, Vegetables",
+    "Origin": "England, 18th century"
+  },
+  "orange": {
+    "Category": "Citrus fruit",
+    "Species": "Citrus sinensis",
+    "Calories": "~47 kcal / 100 g",
+    "Key Nutrients": "Vitamin C, Folate, Fibre"
+  },
+  "broccoli": {
+    "Category": "Cruciferous vegetable",
+    "Species": "Brassica oleracea var. italica",
+    "Calories": "~34 kcal / 100 g",
+    "Key Nutrients": "Vitamin C, K, Folate, Fibre"
+  },
+  "carrot": {
+    "Category": "Root vegetable",
+    "Species": "Daucus carota",
+    "Calories": "~41 kcal / 100 g",
+    "Key Nutrients": "Beta-carotene, Vitamin K1"
+  },
+  "hot dog": {
+    "Category": "Processed food",
+    "Base": "Cooked sausage in a bun",
+    "Typical Calories": "~290 kcal",
+    "Common Toppings": "Mustard, Ketchup, Onion"
+  },
+  "pizza": {
+    "Category": "Baked dish",
+    "Origin": "Naples, Italy, 18th century",
+    "Base": "Leavened wheat dough",
+    "Common Toppings": "Tomato sauce, Cheese, Meats"
+  },
+  "donut": {
+    "Category": "Fried confectionery",
+    "Typical Calories": "~250 – 400 kcal",
+    "Common Coatings": "Glaze, Chocolate, Sugar",
+    "Shape": "Toroidal / Filled"
+  },
+  "cake": {
+    "Category": "Baked dessert",
+    "Base Ingredients": "Flour, Sugar, Eggs, Fat",
+    "Common Types": "Sponge, Cheesecake, Layer",
+    "Occasions": "Celebrations"
+  },
+  "chair": {
+    "Category": "Seating furniture",
+    "Common Materials": "Wood / Metal / Plastic",
+    "Typical Seat Height": "43 – 48 cm",
+    "Load Rating": "~ 100 – 200 kg"
+  },
+  "couch": {
+    "Category": "Upholstered seating furniture",
+    "Typical Seats": "2 – 4",
+    "Common Materials": "Fabric / Leather / Microfibre",
+    "Typical Length": "1.8 – 2.8 m"
+  },
+  "potted plant": {
+    "Category": "Decorative / Indoor plant",
+    "Medium": "Soil in container",
+    "Common Types": "Succulents, Ferns, Palms",
+    "Care Needs": "Light, Water, Nutrients"
+  },
+  "bed": {
+    "Category": "Sleeping furniture",
+    "Common Sizes": "Single, Double, Queen, King",
+    "Components": "Frame, Mattress, Bedding",
+    "Typical Height": "60 – 90 cm"
+  },
+  "dining table": {
+    "Category": "Furniture",
+    "Common Materials": "Wood / Glass / Metal",
+    "Typical Seats": "4 – 8",
+    "Standard Height": "72 – 76 cm"
+  },
+  "toilet": {
+    "Category": "Sanitary fixture",
+    "Water Usage": "3 – 13 L per flush",
+    "Common Materials": "Vitreous china / Porcelain",
+    "Flush Types": "Gravity / Pressure-assisted"
+  },
+  "tv": {
+    "Category": "Display / Entertainment device",
+    "Common Sizes": "32 – 85 inches",
+    "Panel Types": "LED, OLED, QLED",
+    "Typical Resolution": "1080p / 4K / 8K"
+  },
+  "laptop": {
+    "Category": "Portable computer",
+    "Display Sizes": "11 – 17 inches",
+    "Battery Life": "4 – 20 hours",
+    "Common OS": "Windows / macOS / Linux"
+  },
+  "mouse": {
+    "Category": "Computer input device",
+    "Connection": "USB / Bluetooth / Wireless",
+    "Sensor Types": "Optical / Laser",
+    "Typical DPI": "400 – 16,000"
+  },
+  "remote": {
+    "Category": "Wireless control device",
+    "Frequency": "IR / RF / Bluetooth",
+    "Power": "AAA / AA batteries",
+    "Common Use": "TV / Audio / AC control"
+  },
+  "keyboard": {
+    "Category": "Computer input device",
+    "Key Count": "87 – 108 keys (standard)",
+    "Switch Types": "Membrane / Mechanical",
+    "Connection": "USB / Bluetooth / Wireless"
+  },
+  "cell phone": {
+    "Category": "Mobile computing device",
+    "Display": "4.5 – 7 inches",
+    "Connectivity": "5G / 4G / Wi-Fi / Bluetooth",
+    "Battery": "3,000 – 6,000 mAh typical"
+  },
+  "microwave": {
+    "Category": "Kitchen appliance",
+    "Frequency": "2.45 GHz",
+    "Typical Power": "600 – 1,200 W",
+    "Capacity": "17 – 35 L"
+  },
+  "oven": {
+    "Category": "Kitchen appliance",
+    "Heat Source": "Gas / Electric / Convection",
+    "Typical Temp Range": "100 – 260 °C",
+    "Common Uses": "Baking, Roasting, Broiling"
+  },
+  "toaster": {
+    "Category": "Small kitchen appliance",
+    "Typical Power": "700 – 1,200 W",
+    "Slots": "2 or 4",
+    "Function": "Browning bread via radiant heat"
+  },
+  "sink": {
+    "Category": "Plumbing fixture",
+    "Common Materials": "Stainless steel / Ceramic",
+    "Usage": "Hand washing / Dishwashing",
+    "Supply": "Hot & cold running water"
+  },
+  "refrigerator": {
+    "Category": "Kitchen appliance",
+    "Operating Temp": "1 – 4 °C (fridge), -18 °C (freezer)",
+    "Cooling Principle": "Vapour-compression refrigeration",
+    "Typical Capacity": "150 – 600 L"
+  },
+  "book": {
+    "Category": "Printed / Bound publication",
+    "Common Formats": "Hardcover / Paperback / E-book",
+    "Standard Sizes": "A5 / A4 / Trade paperback",
+    "Materials": "Paper, Cardboard, Ink"
+  },
+  "clock": {
+    "Category": "Timekeeping device",
+    "Mechanism": "Quartz / Mechanical / Digital",
+    "Power": "Battery / Mains / Spring",
+    "Accuracy": "±1 – 15 sec/day"
+  },
+  "vase": {
+    "Category": "Decorative vessel",
+    "Common Materials": "Ceramic / Glass / Porcelain",
+    "Primary Use": "Holding cut flowers",
+    "Origin": "Ancient China / Greece"
+  },
+  "scissors": {
+    "Category": "Cutting hand tool",
+    "Blade Material": "Stainless steel",
+    "Pivot": "Rivet / Screw",
+    "Common Sizes": "12 – 25 cm (blade length)"
+  },
+  "teddy bear": {
+    "Category": "Stuffed toy",
+    "Fill Material": "Polyester / Cotton",
+    "Outer Material": "Plush / Velboa",
+    "Origin": "Early 1900s, USA & Germany"
+  },
+  "hair drier": {
+    "Category": "Personal care appliance",
+    "Typical Power": "1,200 – 2,400 W",
+    "Airflow Temp": "60 – 105 °C",
+    "Function": "Drying hair with heated air"
+  },
+  "toothbrush": {
+    "Category": "Oral hygiene tool",
+    "Bristle Material": "Nylon",
+    "Recommended Use": "2 min, twice daily",
+    "Types": "Manual / Electric"
+  }
+}

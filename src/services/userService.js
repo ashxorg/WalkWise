@@ -46,6 +46,12 @@ export async function generateQuests(count = 5, userId = null) {
   return res.json();
 }
 
+export async function getObjectProperties(label) {
+  const res = await fetch(`/api/objects/${encodeURIComponent(label)}/properties`);
+  if (!res.ok) return {};
+  return res.json();
+}
+
 export async function clearConversation(userId) {
   const res = await fetch(`/api/gemini/conversation/${encodeURIComponent(userId)}`, {
     method: 'DELETE',
