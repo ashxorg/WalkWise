@@ -1,7 +1,7 @@
 // elevenlabs.js — proxies to the ASP.NET /api/speak endpoint.
 // The server holds the ElevenLabs API key.
 
-export const ELEVENLABS_DEFAULT_VOICE_ID = 'EXAVITQu4vr4xnSDxMaL'; // "Sarah"
+export const ELEVENLABS_DEFAULT_VOICE_ID = 'flHkNRp1BlvT73UL6gyz';
 
 let _currentAudio = null;
 
