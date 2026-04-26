@@ -34,21 +34,7 @@ Filename must be `yolov8n.onnx` and shape `1×3×640×640` input → `1×84×840
 
 ### Add API keys
 
-Copy `.env.example` to `.env` and fill in three values:
-
-```bash
-cp .env.example .env
-# then edit .env
-```
-
-```dotenv
-VITE_GOOGLE_VISION_API_KEY=AIza…   # from Google Cloud — enable Cloud Vision API
-VITE_GEMINI_API_KEY=AIza…          # from https://aistudio.google.com/app/apikey
-VITE_ELEVENLABS_API_KEY=sk_…       # from elevenlabs.io → Profile → API Keys
-VITE_ELEVENLABS_VOICE_ID=flHkNRp1BlvT73UL6gyz   # optional — default is "Sarah"
-```
-
-> ⚠️ **Security note.** These keys are inlined into the client bundle at build time so the browser can call the APIs directly. Anyone who loads the deployed site can extract them from DevTools and use your quota. Use restricted/IP-locked keys, or only deploy to audiences you trust.
+unzip `WalkWise.Api/appsettings.Development.json.zip` and replace the example keys with your own keys
 
 ### Run locally
 
