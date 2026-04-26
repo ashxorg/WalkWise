@@ -15,6 +15,160 @@
     <title>WalkWise</title>
   </head>
   <body>
+    <!-- Intro Screen -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+        
+        #intro-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: #000000;
+            color: #ffffff;
+            font-family: 'VT323', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            overflow: hidden;
+            transition: opacity 1s ease;
+        }
+
+        #intro-screen .background-layer {
+            position: absolute;
+            font-size: 3.5rem;
+            color: #00ff41;
+            text-shadow: 0 0 10px #00ff41, 0 0 20px #00ff41;
+            z-index: 1;
+            display: none;
+            text-align: center;
+            width: auto;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            pointer-events: none;
+        }
+
+        #intro-screen .main-panel {
+            position: relative;
+            width: 850px; 
+            height: 500px; 
+            z-index: 2;
+        }
+
+        #intro-screen .part {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #0a0a0a;
+            border: 4px solid #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+            transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        #intro-screen .top { clip-path: polygon(0 0, 100% 0, 100% 30%, 70% 45%, 30% 35%, 0 50%); }
+        #intro-screen .bottom { clip-path: polygon(0 50%, 30% 35%, 70% 45%, 100% 30%, 100% 100%, 0 100%); }
+
+        #intro-screen .header { font-size: 3rem; margin-bottom: 15px; }
+        
+        #intro-screen .counter { 
+            font-size: 5rem; 
+            border: 6px solid currentColor; 
+            border-radius: 50%; 
+            width: 150px; 
+            height: 150px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+        }
+
+        #intro-screen .status { 
+            font-size: 4.5rem; 
+            margin-top: 15px; 
+            visibility: hidden; 
+        }
+
+        #intro-screen.broken .top { transform: translate(-120px, -150px) rotate(-4deg); }
+        #intro-screen.broken .bottom { transform: translate(120px, 150px) rotate(3deg); }
+        
+        /* Mobile scaling for intro */
+        @media (max-width: 900px) {
+            #intro-screen .main-panel { transform: scale(0.4); }
+            #intro-screen .background-layer { font-size: 1.5rem; }
+        }
+    </style>
+
+    <div id="intro-screen">
+        <div id="override-text" class="background-layer">
+            Just4Fun System Overridden :>
+        </div>
+        <div class="main-panel">
+            <div class="part top">
+                <div class="header">BORING APP LOADING......</div>
+                <div class="counter"><span class="val">0</span>%</div>
+                <div class="status">Success</div>
+            </div>
+            <div class="part bottom">
+                <div class="header">BORING APP LOADING......</div>
+                <div class="counter"><span class="val">0</span>%</div>
+                <div class="status">Success</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const introScreen = document.getElementById('intro-screen');
+        const vals = document.querySelectorAll('#intro-screen .val');
+        const statuses = document.querySelectorAll('#intro-screen .status');
+        const override = document.getElementById('override-text');
+        let progress = 0;
+
+        const fastTick = setInterval(() => {
+            if (progress < 98) {
+                progress++;
+                vals.forEach(v => v.innerText = progress);
+            } else {
+                clearInterval(fastTick);
+                progress = 99;
+                vals.forEach(v => v.innerText = progress);
+                
+                setTimeout(() => {
+                    progress = 100;
+                    vals.forEach(v => v.innerText = progress);
+                    statuses.forEach(s => s.style.visibility = 'visible');
+                    startGlitch(1);
+                }, 1000);
+            }
+        }, 30);
+
+        function startGlitch(count) {
+            if (count <= 3) {
+                setTimeout(() => {
+                    statuses.forEach(s => s.innerText += "?");
+                    if (count < 3) startGlitch(count + 1);
+                    else triggerOverride();
+                }, 500);
+            }
+        }
+
+        function triggerOverride() {
+            setTimeout(() => {
+                introScreen.classList.add('broken');
+                setTimeout(() => {
+                    override.style.display = 'block';
+                    // Fade out after a few seconds
+                    setTimeout(() => {
+                        introScreen.style.opacity = '0';
+                        setTimeout(() => introScreen.remove(), 1000);
+                    }, 2500);
+                }, 400);
+            }, 500);
+        }
+    </script>
+
     <div id="app"></div>
     <script type="module" src="/src/main.js"></script>
   </body>
