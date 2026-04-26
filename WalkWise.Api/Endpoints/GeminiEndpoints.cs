@@ -11,7 +11,8 @@ static class GeminiEndpoints
         var geminiKey       = app.Configuration["ApiKeys:Gemini"]   ?? "";
         var characterPrompt = app.Configuration["CharacterPrompt"]  ?? "";
 
-        var geminiUrl = $"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={Uri.EscapeDataString(geminiKey)}";
+        var geminiProUrl   = $"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key={Uri.EscapeDataString(geminiKey)}";
+        var geminiFlashUrl = $"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={Uri.EscapeDataString(geminiKey)}";
 
         // ── Ask (voice Q&A with persistent conversation history) ──────────────
         app.MapPost("/api/gemini/ask", async (GeminiAskRequest req, IHttpClientFactory factory, ContextService ctx, QrScanService qrScanner, ConversationService conv) =>
@@ -80,7 +81,7 @@ static class GeminiEndpoints
             };
 
             var client = factory.CreateClient();
-            var res = await client.PostAsJsonAsync(geminiUrl, body);
+            var res = await client.PostAsJsonAsync(geminiProUrl, body);
             if (!res.IsSuccessStatusCode)
                 return Results.Problem(await res.Content.ReadAsStringAsync(), statusCode: (int)res.StatusCode);
 
@@ -142,7 +143,7 @@ static class GeminiEndpoints
             };
 
             var client = factory.CreateClient();
-            var res = await client.PostAsJsonAsync(geminiUrl, body);
+            var res = await client.PostAsJsonAsync(geminiFlashUrl, body);
             if (!res.IsSuccessStatusCode)
                 return Results.Problem(await res.Content.ReadAsStringAsync(), statusCode: (int)res.StatusCode);
 
@@ -191,7 +192,7 @@ static class GeminiEndpoints
             };
 
             var client = factory.CreateClient();
-            var res = await client.PostAsJsonAsync(geminiUrl, body);
+            var res = await client.PostAsJsonAsync(geminiFlashUrl, body);
             if (!res.IsSuccessStatusCode)
                 return Results.Problem(await res.Content.ReadAsStringAsync(), statusCode: (int)res.StatusCode);
 

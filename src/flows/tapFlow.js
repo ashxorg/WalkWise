@@ -48,6 +48,10 @@ export function createTapFlow(overlay, camera) {
         setState({ speaking: true });
         try {
           await speak({ voiceId: settings.elevenVoiceId, text });
+        } catch (speakErr) {
+          // Mobile browsers block autoplay when the original tap gesture has expired
+          // (several async API calls later). Swallow silently — the description is already shown.
+          console.warn('speak() blocked (likely autoplay policy):', speakErr);
         } finally {
           setState({ speaking: false });
         }
