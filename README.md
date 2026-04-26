@@ -45,7 +45,7 @@ cp .env.example .env
 VITE_GOOGLE_VISION_API_KEY=AIza…   # from Google Cloud — enable Cloud Vision API
 VITE_GEMINI_API_KEY=AIza…          # from https://aistudio.google.com/app/apikey
 VITE_ELEVENLABS_API_KEY=sk_…       # from elevenlabs.io → Profile → API Keys
-VITE_ELEVENLABS_VOICE_ID=EXAVITQu4vr4xnSDxMaL   # optional — default is "Sarah"
+VITE_ELEVENLABS_VOICE_ID=flHkNRp1BlvT73UL6gyz   # optional — default is "Sarah"
 ```
 
 > ⚠️ **Security note.** These keys are inlined into the client bundle at build time so the browser can call the APIs directly. Anyone who loads the deployed site can extract them from DevTools and use your quota. Use restricted/IP-locked keys, or only deploy to audiences you trust.

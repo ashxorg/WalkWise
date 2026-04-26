@@ -168,7 +168,8 @@ a { color: var(--accent); }
 
 /* ----------------- game button ----------------- */
 .game-btn {
-  right: 60px; /* Offset it to the left of the gear button */
+  top: calc(var(--safe-top) + 58px); /* below gear: 12 + 38 + 8 */
+  right: 12px;
 }
 
 /* ----------------- hero (pre-start) ----------------- */
@@ -748,8 +749,8 @@ a { color: var(--accent); }
 /* ----------------- profile button ----------------- */
 .profile-btn {
   position: absolute;
-  top: calc(var(--safe-top) + 12px);
-  right: 104px; /* gear(38) + game(38) + gaps */
+  top: calc(var(--safe-top) + 104px); /* below game: 12 + 38 + 8 + 38 + 8 */
+  right: 12px;
   width: 38px; height: 38px;
   border-radius: 50%;
   background: var(--card);

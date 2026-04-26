@@ -34,7 +34,7 @@ function loadSettings() {
 
 function defaults() {
   return {
-    elevenVoiceId: 'EXAVITQu4vr4xnSDxMaL',
+    elevenVoiceId: 'flHkNRp1BlvT73UL6gyz',
     detectionFps: 3,
     speakOnTap: true,
   };

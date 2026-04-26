@@ -5,7 +5,7 @@ import { getState, setState, showToast } from '../state.js';
 import { blobToBase64 } from '../core/audio.js';
 import { analyzeImage } from '../services/vision.js';
 import { answerSpokenQuestion } from '../services/gemini.js';
-import { speak, stopSpeaking } from '../services/elevenlabs.js';
+import { speak, stopSpeaking, unlockAudio } from '../services/elevenlabs.js';
 import { stripDataUrl, friendlyError } from '../utils.js';
 
 /**
@@ -15,6 +15,7 @@ import { stripDataUrl, friendlyError } from '../utils.js';
 export function createMicFlow(recorder, camera) {
   /** Begin recording the user's spoken question. */
   async function start() {
+    unlockAudio(); // must run synchronously from the user gesture to unlock audio on mobile
     try {
       stopSpeaking();
       await recorder.start();
