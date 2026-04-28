@@ -41,6 +41,12 @@ unzip `WalkWise.Api/appsettings.Development.json.zip` and replace the example ke
 ```bash
 npm run dev
 ```
+Then go to WalkWise.Api and run the .Net App
+
+```bash
+cd ./WalkWise.Api
+dotnet run
+```
 
 Open the URL it prints (e.g. `http://localhost:5173`). On your phone, **camera requires HTTPS on iOS**, so the easiest path is to deploy to Vercel and open the live URL there.
 
